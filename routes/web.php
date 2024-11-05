@@ -1,12 +1,27 @@
 <?php
 
+// 匯入AdminController、HomeController、UserController）與中介層 AuthAdmin
+// 並且使用 Route 和 Auth 工具來設定路由和認證。
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\UserController;
+use App\Http\Middleware\AuthAdmin;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
 
 
-
+// 自動生成用於使用者認證的路由（例如登入、註冊、密碼重設等）。
+// Auth::routes() 幫助快速設置一組基於身份驗證的路由。
 Auth::routes();
 
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
+
+
+Route::middleware(['auth'])->group(function(){
+    Route::get('/account-dashboard',[UserController::class,'index'])->name('user.index');
+});
+
+Route::middleware(['auth',AuthAdmin::class])->group(function(){
+    Route::get('/admin',[AdminController::class,'index'])->name('admin.index');
+});
