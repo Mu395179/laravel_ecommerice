@@ -23,7 +23,7 @@
                                 <label for="email">Email address *</label>
                                 @error('email')
                                     <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
+                                        <strong>查無此信箱</strong>
                                     </span>
                                 @enderror
                             </div>
@@ -37,7 +37,7 @@
                                 <label for="customerPasswodInput">Password *</label>
                                 @error('password')
                                     <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
+                                        <strong>密碼錯誤</strong>
                                     </span>
                                 @enderror
                             </div>
