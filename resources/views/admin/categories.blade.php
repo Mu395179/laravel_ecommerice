@@ -32,7 +32,7 @@
                             </div>
                         </form>
                     </div>
-                    <a class="tf-button style-1 w208" href="#"><i class="icon-plus"></i>新增</a>
+                    <a class="tf-button style-1 w208" href="{{route('admin.category.add')}}"><i class="icon-plus"></i>新增</a>
                 </div>
                 <div class="wg-table table-all-user">
                     <div class="table-responsive">
@@ -54,17 +54,17 @@
                             <tbody>
                                 @foreach ($categories as $category)
                                     <tr>
-                                        <td>{{ $brand->id }}</td>
+                                        <td>{{ $category->id }}</td>
                                         <td class="pname">
                                             <div class="image">
-                                                <img src="{{ asset('uploads/brands/' . $category->image) }}"
+                                                <img src="{{ asset('uploads/categories/' . $category->image) }}"
                                                      class="image">
                                             </div>
                                             <div class="name">
                                                 <a href="#" class="body-title-2">{{ $category->name }}</a>
                                             </div>
                                         </td>
-                                        <td>{{ $brand->slug }}</td>
+                                        <td>{{ $category->slug }}</td>
                                         <td><a href="#" target="_blank">1</a></td>
                                         <td>
                                             <div class="list-icon-function">

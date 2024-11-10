@@ -47,6 +47,11 @@
                     <div class="body-title">Upload images <span class="tf-color-1">*</span>
                     </div>
                     <div class="upload-image flex-grow">
+                        @if($brand->image)
+                        <div class="item" id="imgpreview">
+                            <img src="{{asset('uploads/brands')/$brand->image}}" class="effect8" alt="">
+                        </div>
+                        @endif
                         <div class="item" id="imgpreview" style="display:none">
                             <img src="upload-1.html" class="effect8" alt="">
                         </div>

@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\File;
 use Intervention\Image\Laravel\Facades\Image;
 use Intervention\Image\ImageManager;
 
+
+// index
 class AdminController extends Controller
 {
     public function index()
@@ -18,15 +20,18 @@ class AdminController extends Controller
         return view('admin.index');
     }
 
+// brands
     public function brands()
     {
         $brands = Brand::orderBy('id', 'DESC')->paginate(10);
         return view('admin.brands', compact('brands'));
     }
+    // brands add
     public function add_brand()
     {
         return view('admin.brand-add');
     }
+        // brands save
     public function brand_store(Request $request)
     {
         $request->validate([
@@ -46,12 +51,15 @@ class AdminController extends Controller
         return redirect()->route('admin.brands')->with('status', '品牌項目新增成功');
     }
 
+
+    // brands edit find
     public function brand_edit($id)
     {
         $brand = Brand::find($id);
         return view('admin.brand-edit', compact('brand'));
     }
 
+    // brands update
     public function brand_update(Request $request) {
         $request->validate([
             'name' => 'required',
@@ -77,16 +85,18 @@ class AdminController extends Controller
         return redirect()->route('admin.brands')->with('status', '品牌項目編輯成功');
     }
 
+    // brand image edit(124,124)
     public function GenerateBrandThumbailsImage($image, $imageName)
     {
         $destinationPath = public_path('uploads/brands');
         $img = Image::read($image->path());
         $img->cover(124, 124, "top");
         $img->resize(124, 124, function ($constraint) {
-            $constraint->aspectRatio();
-        })->save($destinationPath . '/' . $imageName);
+            $constraint->aspectRatio();})
+            ->save($destinationPath . '/' . $imageName);
     }
 
+    // brand delete
     public function brand_delete($id){
         $brand = Brand::find($id);
         if(file::exists(public_path('uploads/brands').'/'.$brand->image)){
@@ -95,9 +105,42 @@ class AdminController extends Controller
         $brand->delete();
         return redirect()->route('admin.brands')->with('status',"品牌項目刪除成功");
     }
-
+// categories
     public function categories(){
         $categories = Category::orderBy('id','DESC')->paginate(10);
         return view('admin.categories',compact('categories'));
+    }
+
+    // categories add
+    public function add_category(){
+        return view('admin.category-add');
+    }
+
+    public function category_store(Request $request){
+        $request->validate([
+            'name' => 'required',
+            'slug' => 'required|unique:categories,slug',
+            'image' => 'mimes:png,jpg,jpeg|max:4080',
+        ]);
+        $category = new Category();
+        $category->name = $request->name;
+        $category->slug = Str::slug($request->name);
+        $image = $request->file('image');
+        $file_extention = $request->file('image')->extension();
+        $file_name = Carbon::now()->timestamp . '.' . $file_extention;
+        $this->GenerateCategoryThumbailsImage($image, $file_name);
+        $category->image = $file_name;
+        $category->save();
+        return redirect()->route('admin.categories')->with('status', '類別項目新增成功');
+    }
+
+    public function GenerateCategoryThumbailsImage($image, $imageName)
+    {
+        $destinationPath = public_path('uploads/categories');
+        $img = Image::read($image->path());
+        $img->cover(124, 124, "top");
+        $img->resize(124, 124, function ($constraint) {
+            $constraint->aspectRatio();})
+            ->save($destinationPath . '/' . $imageName);
     }
 }
