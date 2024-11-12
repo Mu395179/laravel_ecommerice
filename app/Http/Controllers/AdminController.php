@@ -174,5 +174,13 @@ class AdminController extends Controller
         return redirect()->route('admin.categories')->with('status', '類別項目編輯成功');
     }
 
+    public function category_delete($id){
+        $category = Category::find($id);
+        if(file::exists(public_path('uploads/categories').'/'.$category->image)){
+            File::delete(public_path('uploads/categories').'/'.$category->image);
+        }
+        $category->delete();
+        return redirect()->route('admin.categories')->with('status',"類別項目刪除成功");
+    }
 
 }
