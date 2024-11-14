@@ -21,7 +21,7 @@ class AdminController extends Controller
         return view('admin.index');
     }
 
-// brands
+    // brands
     public function brands()
     {
         $brands = Brand::orderBy('id', 'DESC')->paginate(10);
@@ -32,7 +32,7 @@ class AdminController extends Controller
     {
         return view('admin.brand-add');
     }
-        // brands save
+    // brands save
     public function brand_store(Request $request)
     {
         $request->validate([
@@ -61,19 +61,20 @@ class AdminController extends Controller
     }
 
     // brands update
-    public function brand_update(Request $request) {
+    public function brand_update(Request $request)
+    {
         $request->validate([
             'name' => 'required',
-            'slug' => 'required|unique:brands,slug,'.$request->id,
+            'slug' => 'required|unique:brands,slug,' . $request->id,
             'image' => 'mimes:png,jpg,jpeg|max:4080',
         ]);
 
         $brand = Brand::find($request->id);
         $brand->name = $request->name;
         $brand->slug = Str::slug($request->name);
-        if($request->hasFile('image')){
-            if(File::exists(public_path('uploads/brands').'/'.$brand->image)){
-                File::delete(public_path('uploads/brands').'/'.$brand->image);
+        if ($request->hasFile('image')) {
+            if (File::exists(public_path('uploads/brands') . '/' . $brand->image)) {
+                File::delete(public_path('uploads/brands') . '/' . $brand->image);
             }
             $image = $request->file('image');
             $file_extention = $request->file('image')->extension();
@@ -81,7 +82,7 @@ class AdminController extends Controller
             $this->GenerateBrandThumbailsImage($image, $file_name);
             $brand->image = $file_name;
         }
-       
+
         $brand->save();
         return redirect()->route('admin.brands')->with('status', '品牌項目編輯成功');
     }
@@ -93,31 +94,36 @@ class AdminController extends Controller
         $img = Image::read($image->path());
         $img->cover(124, 124, "top");
         $img->resize(124, 124, function ($constraint) {
-            $constraint->aspectRatio();})
+            $constraint->aspectRatio();
+        })
             ->save($destinationPath . '/' . $imageName);
     }
 
     // brand delete
-    public function brand_delete($id){
+    public function brand_delete($id)
+    {
         $brand = Brand::find($id);
-        if(file::exists(public_path('uploads/brands').'/'.$brand->image)){
-            File::delete(public_path('uploads/brands').'/'.$brand->image);
+        if (file::exists(public_path('uploads/brands') . '/' . $brand->image)) {
+            File::delete(public_path('uploads/brands') . '/' . $brand->image);
         }
         $brand->delete();
-        return redirect()->route('admin.brands')->with('status',"品牌項目刪除成功");
+        return redirect()->route('admin.brands')->with('status', "品牌項目刪除成功");
     }
-// categories
-    public function categories(){
-        $categories = Category::orderBy('id','DESC')->paginate(10);
-        return view('admin.categories',compact('categories'));
+    // categories
+    public function categories()
+    {
+        $categories = Category::orderBy('id', 'DESC')->paginate(10);
+        return view('admin.categories', compact('categories'));
     }
 
     // categories add
-    public function add_category(){
+    public function add_category()
+    {
         return view('admin.category-add');
     }
 
-    public function category_store(Request $request){
+    public function category_store(Request $request)
+    {
         $request->validate([
             'name' => 'required',
             'slug' => 'required|unique:categories,slug',
@@ -141,28 +147,31 @@ class AdminController extends Controller
         $img = Image::read($image->path());
         $img->cover(124, 124, "top");
         $img->resize(124, 124, function ($constraint) {
-            $constraint->aspectRatio();})
+            $constraint->aspectRatio();
+        })
             ->save($destinationPath . '/' . $imageName);
     }
 
-    public function category_edit($id){
+    public function category_edit($id)
+    {
         $category = Category::find($id);
-        return view('admin.category-edit',compact('category'));
+        return view('admin.category-edit', compact('category'));
     }
 
-    public function category_update(Request $request){
+    public function category_update(Request $request)
+    {
         $request->validate([
             'name' => 'required',
-            'slug' => 'required|unique:categories,slug,'.$request->id,
+            'slug' => 'required|unique:categories,slug,' . $request->id,
             'image' => 'mimes:png,jpg,jpeg|max:4080',
         ]);
 
         $category = Category::find($request->id);
         $category->name = $request->name;
         $category->slug = Str::slug($request->name);
-        if($request->hasFile('image')){
-            if(File::exists(public_path('uploads/categories').'/'.$category->image)){
-                File::delete(public_path('uploads/categories').'/'.$category->image);
+        if ($request->hasFile('image')) {
+            if (File::exists(public_path('uploads/categories') . '/' . $category->image)) {
+                File::delete(public_path('uploads/categories') . '/' . $category->image);
             }
             $image = $request->file('image');
             $file_extention = $request->file('image')->extension();
@@ -170,24 +179,113 @@ class AdminController extends Controller
             $this->GenerateCategoryThumbailsImage($image, $file_name);
             $category->image = $file_name;
         }
-       
+
         $category->save();
         return redirect()->route('admin.categories')->with('status', '類別項目編輯成功');
     }
 
-    public function category_delete($id){
+    public function category_delete($id)
+    {
         $category = Category::find($id);
-        if(file::exists(public_path('uploads/categories').'/'.$category->image)){
-            File::delete(public_path('uploads/categories').'/'.$category->image);
+        if (file::exists(public_path('uploads/categories') . '/' . $category->image)) {
+            File::delete(public_path('uploads/categories') . '/' . $category->image);
         }
         $category->delete();
-        return redirect()->route('admin.categories')->with('status',"類別項目刪除成功");
+        return redirect()->route('admin.categories')->with('status', "類別項目刪除成功");
     }
 
     // products
 
-    public function products(){
-        $products = Product::orderBy('created_at','DESC')->paginate(10);
-        return view('admin.products',compact('products'));
+    public function products()
+    {
+        $products = Product::orderBy('created_at', 'DESC')->paginate(10);
+        return view('admin.products', compact('products'));
+    }
+
+    public function product_add()
+    {
+        $categories = Category::select('id', 'name')->orderBy('name')->get();
+        $brands = Brand::select('id', 'name')->orderBy('name')->get();
+        return view('admin.product-add', compact('categories', 'brands'));
+    }
+
+    public function product_store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required',
+            'slug' => 'required|unique:products,slug',
+            'short_description' => 'required',
+            'description' => 'required',
+            'regular_price' => 'required',
+            'sale_price' => 'required',
+            'SKU' => 'required',
+            'stock_status' => 'required',
+            'featured' => 'required',
+            'quantity' => 'required',
+            'image' => 'required|mimes:png,jpeg|max:4048',
+            'category_id' => 'required',
+            'brand_id' => 'required',
+        ]);
+
+        $product = new Product();
+        $product->name = $request->name;
+        $product->slug = Str::slug($request->name);
+        $product->short_description = $request->short_description;
+        $product->description = $request->description;
+        $product->regular_price = $request->regular_price;
+        $product->sale_price = $request->sale_price;
+        $product->SKU = $request->SKU;
+        $product->stock_status = $request->stock_status;
+        $product->featured = $request->featured;
+        $product->quantity = $request->quantity;
+        $product->category_id = $request->category_id;
+        $product->brand_id = $request->brand_id;
+
+        $current_timestamp = Carbon::now()->timestamp;
+
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName =  $current_timestamp . '.' . $image->extension();
+            $this->GenerateProductThumbnailImage($image, $imageName);
+            $product->image =  $imageName;
+        }
+
+        $gallery_arr = array();
+        $gallery_images = "";
+        $counter = 1;
+
+        if ($request->hasfile('images')) {
+            $allowedfileExtion = ['jpg', 'png', 'jpeg'];
+            $files = $request->file('images');
+            foreach ($files as $file) {
+                $gextension = $file->getClientOriginalExtension();
+                $gcheck = in_array($gextension, $allowedfileExtion);
+                if ($gcheck) {
+                    $gfileName = $current_timestamp . '-' . $counter . '.' . $gextension;
+                    $this->GenerateProductThumbnailImage($file, $gfileName);
+                    array_push($gallery_arr, $gfileName);
+                    $counter = $counter + 1;
+                }
+            }
+            $gallery_images = implode(',', $gallery_arr);
+        }
+        $product->images = $gallery_images;
+        $product->save();
+        return redirect()->route('admin.products')->with('status', '產品新增成功');
+    }
+
+    public function GenerateProductThumbnailImage($image, $imageName)
+    {
+        $destinationPathThumbnail = public_path('uploads/products/thumbnails');
+        $destinationPath = public_path('uploads/products');
+        $img = Image::read($image->path());
+
+        $img->cover(540, 689, "top");
+        $img->resize(540, 689, function ($constraint) {
+            $constraint->aspectRatio();
+        })->save($destinationPath . '/' . $imageName);
+        $img->resize(104, 104, function ($constraint) {
+            $constraint->aspectRatio();
+        })->save($destinationPathThumbnail . '/' . $imageName);
     }
 }

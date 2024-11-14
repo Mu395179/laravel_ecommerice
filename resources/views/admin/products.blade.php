@@ -1,3 +1,4 @@
+
 @extends('layouts.admin')
 
 @section('content')
@@ -33,10 +34,14 @@
                         </div>
                     </form>
                 </div>
-                <a class="tf-button style-1 w208" href="add-product.html"><i
+                <a class="tf-button style-1 w208" href="{{route('admin.product.add')}}"><i
                         class="icon-plus"></i>Add new</a>
             </div>
             <div class="table-responsive">
+                @if (Session::has('status'))
+                <p class="alert alert-siccess">{{ Session::get('status') }}
+                </p>
+            @endif
                 <table class="table table-striped table-bordered">
                     <thead>
                         <tr>
@@ -62,18 +67,18 @@
                                     <img src="{{asset('uploads/products/thumbnails')}}/{{$product->image}}" alt="{{$product->name}}" class="image">
                                 </div>
                                 <div class="name">
-                                    <a href="#" class="body-title-2">>{{$product->name}}</a>
+                                    <a href="#" class="body-title-2">{{$product->name}}</a>
                                     <div class="text-tiny mt-3">>{{$product->slug}}</div>
                                 </div>
                             </td>
-                            <td>>{{$product->regular_price}}</td>
-                            <td>>{{$product->sale_price}}</td>
-                            <td>>{{$product->SKU}}</td>
-                            <td>>{{$product->category->name}}</td>
-                            <td>>{{$product->brand->name}}</td>
-                            <td>>{{$product->featured == 0 ? "No":"Yes"}}</td>
-                            <td>>{{$product->stock_status}}</td>
-                            <td>>{{$product->quantity}}</td>
+                            <td>{{ $product->regular_price }}</td>
+                            <td>{{ $product->sale_price }}</td>
+                            <td>{{ $product->SKU }}</td>
+                            <td>{{ $product->category->name }}</td>
+                            <td>{{ $product->brand->name  }}</td>
+                            <td>{{ $product->featured == 0 ? 'No' : 'Yes' }}</td>
+                            <td>{{ $product->stock_status }}</td>
+                            <td>{{ $product->quantity }}</td>
                             <td>
                                 <div class="list-icon-function">
                                     <a href="#" target="_blank">

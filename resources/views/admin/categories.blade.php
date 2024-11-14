@@ -1,3 +1,4 @@
+
 @extends('layouts.admin')
 @section('content')
     <div class="main-content-inner">
@@ -38,7 +39,7 @@
                     <div class="table-responsive">
                         @if (Session::has('status'))
                             <p class="alert alert-siccess">{{ Session::get('status') }}
-                            <p>
+                            </p>
                         @endif
 
                         <table class="table table-striped table-bordered">
