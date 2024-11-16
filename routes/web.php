@@ -4,6 +4,7 @@
 // 並且使用 Route 和 Auth 工具來設定路由和認證。
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ShopController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\AuthAdmin;
 use Illuminate\Support\Facades\Route;
@@ -16,6 +17,7 @@ use Illuminate\Support\Facades\Auth;
 Auth::routes();
 
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
+Route::get('/shop',[ShopController::class,'index'])->name('shop.index');
 
 
 Route::middleware(['auth'])->group(function(){
@@ -24,7 +26,7 @@ Route::middleware(['auth'])->group(function(){
 // admin
 Route::middleware(['auth',AuthAdmin::class])->group(function(){
 
-    // index
+    //admin index
     Route::get('/admin',[AdminController::class,'index'])->name('admin.index');
 
     // brands
