@@ -16,8 +16,10 @@ use Illuminate\Support\Facades\Auth;
 // Auth::routes() 幫助快速設置一組基於身份驗證的路由。
 Auth::routes();
 
+// index
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
 Route::get('/shop',[ShopController::class,'index'])->name('shop.index');
+Route::get('/shop/{product_slug}',[ShopController::class,'product_details'])->name('shop.product.details');
 
 
 Route::middleware(['auth'])->group(function(){
