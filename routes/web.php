@@ -3,6 +3,7 @@
 // 匯入AdminController、HomeController、UserController）與中介層 AuthAdmin
 // 並且使用 Route 和 Auth 工具來設定路由和認證。
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\UserController;
@@ -19,7 +20,17 @@ Auth::routes();
 // index
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
 Route::get('/shop',[ShopController::class,'index'])->name('shop.index');
+
+
+Route::get('/cart',[CartController::class,'index'])->name('cart.index');
+
+// cart
+Route::post('/cart/add',[CartController::class,'add_to_cart'])->name('cart.add');
+
+
+// product.details
 Route::get('/shop/{product_slug}',[ShopController::class,'product_details'])->name('shop.product.details');
+
 
 
 Route::middleware(['auth'])->group(function(){
@@ -55,4 +66,7 @@ Route::middleware(['auth',AuthAdmin::class])->group(function(){
     Route::get('/admin/product/{id}/edit',[AdminController::class,'product_edit'])->name('admin.product.edit');
     Route::put('admin/product/update',[AdminController::class,'product_update'])->name('admin.product.update');
     Route::delete('/admin/product/{id}/delete',[AdminController::class,'product_delete'])->name('admin.product.delete');
+
+   
+
 });
