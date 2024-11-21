@@ -8240,20 +8240,20 @@ img {
 .h-100px {
   height: 6.25rem; }
 
-.gradient-bg {
+/* .gradient-bg {
   background-image: url(../../images/home/demo3/slider_bg.html);
   background-position: top center;
   background-repeat: no-repeat;
-  background-size: 100% auto; }
+  background-size: 100% auto; } */
 
-.gradient-bg-10 {
+/* .gradient-bg-10 {
   background-image: url(../../images/home/demo10/slider_bg.html);
   background-position: top center;
   background-repeat: no-repeat;
   background-size: auto 84rem; }
   @media (min-width: 992px) {
     .gradient-bg-10 {
-      background-size: 100% auto; } }
+      background-size: 100% auto; } } */
 
 @media (min-width: 1200px) {
   .col-xl-20per {
