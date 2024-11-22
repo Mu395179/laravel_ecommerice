@@ -1,4 +1,18 @@
 @extends('layouts.app')
+<style>
+    .brand-list .category-list li {
+    line-height: 40px;
+}
+.brand-list li .chk-brand, 
+.category-list li .chk-category {
+    width: 1rem;
+    height: 1rem;
+    color: #e4e4e4;
+    border: 0.125rem solid currentColor;
+    border-radius: 0;
+    margin-right: 0.75rem;
+}
+</style>
 @section('content')
     <main class="pt-90">
         <section class="shop-main container d-flex pt-4 pt-xl-5">
@@ -28,38 +42,22 @@
                         </h5>
                         <div id="accordion-filter-1" class="accordion-collapse collapse show border-0"
                             aria-labelledby="accordion-heading-1" data-bs-parent="#categories-list">
-                            <div class="accordion-body px-0 pb-0 pt-3">
+                            <div class="accordion-body px-0 pb-0 pt-3 category-list">
                                 <ul class="list list-inline mb-0">
-                                    <li class="list-item">
-                                        <a href="#" class="menu-link py-1">Dresses</a>
-                                    </li>
-                                    <li class="list-item">
-                                        <a href="#" class="menu-link py-1">Shorts</a>
-                                    </li>
-                                    <li class="list-item">
-                                        <a href="#" class="menu-link py-1">Sweatshirts</a>
-                                    </li>
-                                    <li class="list-item">
-                                        <a href="#" class="menu-link py-1">Swimwear</a>
-                                    </li>
-                                    <li class="list-item">
-                                        <a href="#" class="menu-link py-1">Jackets</a>
-                                    </li>
-                                    <li class="list-item">
-                                        <a href="#" class="menu-link py-1">T-Shirts & Tops</a>
-                                    </li>
-                                    <li class="list-item">
-                                        <a href="#" class="menu-link py-1">Jeans</a>
-                                    </li>
-                                    <li class="list-item">
-                                        <a href="#" class="menu-link py-1">Trousers</a>
-                                    </li>
-                                    <li class="list-item">
-                                        <a href="#" class="menu-link py-1">Men</a>
-                                    </li>
-                                    <li class="list-item">
-                                        <a href="#" class="menu-link py-1">Jumpers & Cardigans</a>
-                                    </li>
+                                    @foreach ($categories as $category)
+                                        <li class="list-item">
+                                            <span class="menu-link py-1">
+                                                <input type="checkbox" class="chk-category" name="categories" value="{{$category->id}}"
+                                                @if(in_array($category->id,explode(',',$f_categories))) checked="checked" @endif
+                                                />
+                                                {{$category->name}}
+                                            </span>
+                                            <span class="text-right float-end">{{$category->products->count()}}</span>
+                                           
+                                        </li>
+                                    @endforeach
+                                  
+                                  
                                 </ul>
                             </div>
                         </div>
@@ -486,6 +484,7 @@
         <input type="hidden" id="size" name="size" value="{{$size}}">
         <input type="hidden" id="order" name="order" value="{{$order}}">
         <input type="hidden" id="hdnBrands" name="brands"/>
+        <input type="hidden" id="hdnCategories" name="categories"/>
     </form>
    
 
@@ -517,6 +516,18 @@ $(document).ready(function() {
             }
         });
         $('#hdnBrands').val(brands); // 修正為 $('#hdnBrands')
+        $('#frmfilter').submit(); // 修正為 $('#frmfilter')
+    });
+    $("input[name='categories']").on('change', function() {
+        var categories = "";
+        $("input[name='categories']:checked").each(function() {
+            if (categories === "") {
+                categories += $(this).val();
+            } else {
+                categories += "," + $(this).val();
+            }
+        });
+        $('#hdnCategories').val(categories); // 修正為 $('#hdnBrands')
         $('#frmfilter').submit(); // 修正為 $('#frmfilter')
     });
 });
