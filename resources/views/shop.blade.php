@@ -167,7 +167,7 @@
                                 @foreach($brands as $brand)
                                 <li class="list-item">
                                     <span class="menu-link py-1">
-                                        <input type="checkbox" name="brands" id="{{$brand->id}}" class="chk-brand"
+                                        <input type="checkbox" name="brands" value="{{$brand->id}}" class="chk-brand"
                                         @if(in_array($brand->id,explode(',',$f_brands))) checked="checked" @endif>
                                         {{$brand->name}}
                                     </span>
@@ -485,7 +485,7 @@
         <input type="hidden" name="page" value="{{$products->currentPage()}}">
         <input type="hidden" id="size" name="size" value="{{$size}}">
         <input type="hidden" id="order" name="order" value="{{$order}}">
-        <input type="hidden" id="brands" name="hdnBrands" value="{{$order}}">
+        <input type="hidden" id="hdnBrands" name="brands"/>
     </form>
    
 

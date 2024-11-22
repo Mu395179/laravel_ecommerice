@@ -40,10 +40,8 @@ class ShopController extends Controller
 
         $brands = Brand::orderBy('name', 'ASC')->get();
 
-        $products = Product::where(function($query) use($f_brands) {
-            if (!empty($f_brands)) {
-                $query->whereIn('brand_id', explode(',', $f_brands));
-            }
+        $products = Product::when(!empty($f_brands), function ($query) use ($f_brands) {
+            $query->whereIn('brand_id', explode(',', $f_brands));
         })
         ->orderBy($o_column, $o_order)
         ->paginate($size);
