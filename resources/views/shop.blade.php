@@ -199,17 +199,17 @@
                         </h5>
                         <div id="accordion-filter-price" class="accordion-collapse collapse show border-0"
                             aria-labelledby="accordion-heading-price" data-bs-parent="#price-filters">
-                            <input class="price-range-slider" type="text" name="price_range" value=""
-                                data-slider-min="10" data-slider-max="1000" data-slider-step="5"
-                                data-slider-value="[250,450]" data-currency="$" />
+                            <input class="price-range-slider" type="text" name="price_range" value="200"
+                                data-slider-min="1" data-slider-max="500" data-slider-step="5"
+                                data-slider-value="[{{$min_price}},{{$max_price}}]" data-currency="$" />
                             <div class="price-range__info d-flex align-items-center mt-2">
                                 <div class="me-auto">
                                     <span class="text-secondary">Min Price: </span>
-                                    <span class="price-range__min">$250</span>
+                                    <span class="price-range__min">$1</span>
                                 </div>
                                 <div>
                                     <span class="text-secondary">Max Price: </span>
-                                    <span class="price-range__max">$450</span>
+                                    <span class="price-range__max">$500</span>
                                 </div>
                             </div>
                         </div>
@@ -485,6 +485,8 @@
         <input type="hidden" id="order" name="order" value="{{$order}}">
         <input type="hidden" id="hdnBrands" name="brands"/>
         <input type="hidden" id="hdnCategories" name="categories"/>
+        <input type="hidden" name="min" id="hdnMinPrice" value="{{$min_price}}"/>
+        <input type="hidden" name="max" id="hdnMaxPrice" value="{{$max_price}}"/>
     </form>
    
 
@@ -515,8 +517,8 @@ $(document).ready(function() {
                 brands += "," + $(this).val();
             }
         });
-        $('#hdnBrands').val(brands); // 修正為 $('#hdnBrands')
-        $('#frmfilter').submit(); // 修正為 $('#frmfilter')
+        $('#hdnBrands').val(brands); 
+        $('#frmfilter').submit(); 
     });
     $("input[name='categories']").on('change', function() {
         var categories = "";
@@ -527,9 +529,20 @@ $(document).ready(function() {
                 categories += "," + $(this).val();
             }
         });
-        $('#hdnCategories').val(categories); // 修正為 $('#hdnBrands')
-        $('#frmfilter').submit(); // 修正為 $('#frmfilter')
+        $('#hdnCategories').val(categories); 
+        $('#frmfilter').submit();
     });
+
+    $("[name='price_range']").on("change",function(){
+        var min = $(this).val().split(',')[0];
+        var max = $(this).val().split(',')[1];
+        $("#hdnMinPrice").val(min);
+        $("#hdnMaxPrice").val(max);
+        setTimeout(() => {
+            $('#frmfilter').submit()
+        }, 2000);
+    });
+
 });
 
 
