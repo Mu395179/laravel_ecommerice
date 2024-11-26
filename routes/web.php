@@ -34,7 +34,7 @@ Route::delete('/cart/clear',[CartController::class,'empty_cart'])->name('cart.em
 
 // Wishlish
 Route::post('/wishlish/add',[WishlistController::class,'add_to_wishlist'])->name('wishlist.add');
-
+Route::get('/wishlish',[WishlistController::class,'index'])->name('wishlist.index');
 
 // product.details
 Route::get('/shop/{product_slug}',[ShopController::class,'product_details'])->name('shop.product.details');
